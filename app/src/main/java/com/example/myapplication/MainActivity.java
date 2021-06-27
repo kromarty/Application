@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText amount;
     private Spinner spinner1;
     private Spinner spinner2;
-    private List<String> history;
+    public static List<String> history;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,25 +90,19 @@ public class MainActivity extends AppCompatActivity {
         if (splittedDate[0].length() < 2)
             splittedDate[0] = "0"+splittedDate[0];
         String ndate = splittedDate[0] + "/" + getMonthNumber(splittedDate[1]) + "/" + splittedDate[2];
-        float w = currencyInfoGetter.getInfoByDate((String)spinner1.getSelectedItem(), (String)spinner2.getSelectedItem(), ndate)[0];
-        float result = w * Float.parseFloat(amount.getText().toString());
+        float w1 = currencyInfoGetter.getInfoByDate((String)spinner1.getSelectedItem(), ndate);
+        float w2 = currencyInfoGetter.getInfoByDate((String)spinner2.getSelectedItem(), ndate);
+        float result = w1 / w2 * Float.parseFloat(amount.getText().toString());
         ans.setText(Float.toString(result));
         if (history.size() == 10){
             history.remove(0);
         }
-        history.add(Float.toString(w));
+        history.add(Float.toString(result));
     }
 
     public void openHistory(View view)
     {
         Intent intent = new Intent(".History");
-        String text = new String();
-        if (history.size() != 0){
-            text = history.get(0);
-            for (int i = 1; i<history.size(); i++){
-                text = text + '\n' + history.get(i);
-            }
-        }
         startActivity(intent);
     }
 
