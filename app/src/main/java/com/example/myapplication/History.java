@@ -14,7 +14,6 @@ public class History extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history2);
-        System.out.println("HERE__________");
         TextView hist = findViewById(R.id.history);
         String text = "";
         if (MainActivity.history.size() != 0){
@@ -23,7 +22,7 @@ public class History extends AppCompatActivity {
                 text = text + "\n" + MainActivity.history.get(i);
             }
         }
-        hist.setText(MainActivity.history.size());
+        hist.setText(text);
     }
 
     public void onClick(View view)
