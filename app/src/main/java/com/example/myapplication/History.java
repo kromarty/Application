@@ -15,14 +15,8 @@ public class History extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history2);
         TextView hist = findViewById(R.id.history);
-        String text = "";
-        if (MainActivity.history.size() != 0){
-            text = MainActivity.history.get(0);
-            for(int i=1; i<MainActivity.history.size(); i++){
-                text = text + "\n" + MainActivity.history.get(i);
-            }
-        }
-        hist.setText(text);
+        Bundle history = getIntent().getExtras();
+        hist.setText(history.get("history").toString());
     }
 
     public void onClick(View view)

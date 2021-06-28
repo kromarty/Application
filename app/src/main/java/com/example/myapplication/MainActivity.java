@@ -8,6 +8,8 @@ import android.util.Size;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -17,6 +19,8 @@ import android.app.AlertDialog;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
+
+import static java.lang.Integer.parseInt;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText amount;
     private Spinner spinner1;
     private Spinner spinner2;
-    public static List<String> history;
+    public static List<String> history = new ArrayList<String>();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,27 +86,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onClick(View view)
-    {
-        String date = (String)dateButton.getText();
+    public void onClick(View view) {
+        String date = (String) dateButton.getText();
         String[] splittedDate = date.split(" ");
-        //amount.getText() - amount
         if (splittedDate[0].length() < 2)
-            splittedDate[0] = "0"+splittedDate[0];
+            splittedDate[0] = "0" + splittedDate[0];
         String ndate = splittedDate[0] + "/" + getMonthNumber(splittedDate[1]) + "/" + splittedDate[2];
-        float w1 = currencyInfoGetter.getInfoByDate((String)spinner1.getSelectedItem(), ndate);
-        float w2 = currencyInfoGetter.getInfoByDate((String)spinner2.getSelectedItem(), ndate);
+        float w1 = currencyInfoGetter.getInfoByDate(spinner1.getSelectedItem().toString(), ndate);
+        float w2 = currencyInfoGetter.getInfoByDate(spinner2.getSelectedItem().toString(), ndate);
         float result = w1 / w2 * Float.parseFloat(amount.getText().toString());
         ans.setText(Float.toString(result));
-        if (history.size() == 10){
+
+        if (history.size() == 10) {
             history.remove(0);
         }
-        history.add(Float.toString(result));
+        history.add(ndate + " " + amount.getText().toString() + " " + (String)spinner1.getSelectedItem() + " to " + (String)spinner2.getSelectedItem() + ": " + Float.toString(result));
     }
 
     public void openHistory(View view)
     {
         Intent intent = new Intent(".History");
+        StringBuilder text = new StringBuilder();
+        if (history.size() != 0){
+            text = new StringBuilder(history.get(0));
+            for(int i=1; i<history.size(); i++){
+                text.append("\n").append(history.get(i));
+            }
+        }
+        intent.putExtra("history", text.toString());
         startActivity(intent);
     }
 
